@@ -1,11 +1,19 @@
-name: 04 Using Actions
+name: 04 - Using Actions
 
-on: push
+on: workflow_dispatch
 
 jobs:
+  list:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Print folders and files
+        run: ls -la
+        # output: Lists all files in the repository
+
   build:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: 04-using-actions/react-app
