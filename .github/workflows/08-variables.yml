@@ -1,0 +1,41 @@
+name: 08 - Cross Workflow Variables
+
+on: workflow_dispatch
+
+jobs:
+  echo-org-and-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Org + Repo Vars
+        run: |
+          echo "Org var: ${{ vars.ORG_VAR }}"      
+             # output: Org var: organization value
+          echo "Overridden var: ${{ vars.OVERRIDDEN_VAR }}" 
+            # output: Overridden var: organization value 2
+          echo "Repository var: ${{ vars.REPOSITORY_VAR }}" 
+            # output: Repository var: repository value
+
+  echo-prod:
+    runs-on: ubuntu-latest
+    environment: prod # attach this job to the production environment
+    steps:
+      - name: Print Prod Environment Vars
+        run: |
+          echo "Org var: ${{ vars.ORG_VAR }}"           
+            # output: Org var: organization value
+          echo "Overridden var: ${{ vars.OVERRIDDEN_VAR }}"
+             # output: Overridden var: prod value
+          echo "Repository var: ${{ vars.REPOSITORY_VAR }}" 
+            # output: Repository var: repository value
+          echo "Target var: ${{ vars.TARGET_VAR }}"    
+             # output: Target var: prod
+
+  echo-undefined:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Undefined with Default
+        run: |
+          echo "Undefined var: ${{ vars.UNDEFINED_VAR || 'default value' }}"
+            # output: Undefined var: default value
+          echo "Target var: ${{ vars.TARGET_VAR }}"     
+            # output: Target var:
