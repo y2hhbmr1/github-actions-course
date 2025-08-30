@@ -1,0 +1,41 @@
+name: 12 - 1 - Outputs Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  welcome: # 👈 Job 1
+    runs-on: ubuntu-latest
+    steps:
+      # ---------------- STEP 1 ----------------
+      - name: Set messages
+        id: welcome_step # Step 1: Give the step an ID (so we can reference it later)
+
+        # ---------------- STEP 2 ----------------
+        run: |
+          # Step 2: Write outputs (key=value) to the special file $GITHUB_OUTPUT
+          echo "message=Hello World" >> $GITHUB_OUTPUT
+          echo "date=$(date)" >> $GITHUB_OUTPUT
+
+    # ---------------- STEP 3 ----------------
+    outputs:
+      # Step 3: Publish job outputs by referencing the step ID (welcome_step)
+      greeting: ${{ steps.welcome_step.outputs.message }}
+      today: ${{ steps.welcome_step.outputs.date }}
+
+  goodbye: # 👈 Job 2
+    runs-on: ubuntu-latest
+
+    # ---------------- STEP 4 ----------------
+    needs: welcome # Step 4: Declare dependency (this job waits for "welcome")
+
+    steps:
+      # ---------------- STEP 5 ----------------
+      - name: Show greeting
+        run: |
+          echo "The greeting is: ${{ needs.welcome.outputs.greeting }}"
+        # output: The greeting is: Hello World
+
+      - name: Show date
+        run: echo "Today's date is ${{ needs.welcome.outputs.today }}"
+        # output: Today's date is Tue Aug 27 11:45:00 UTC 2025
