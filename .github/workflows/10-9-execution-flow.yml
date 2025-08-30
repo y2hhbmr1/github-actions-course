@@ -1,0 +1,25 @@
+name: 10 - 9 - Controlling the Execution Flow
+
+on: workflow_dispatch
+
+#Job-level if always()
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1 # Force failure
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: build
+    if: always()
+    # Run regardless of build result
+    steps:
+      - run: exit 0
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - run: echo "🚀 Deploying!"
