@@ -1,2 +1,2 @@
 # GitHub Actions Course
-# Testing functions
+# Testing functions again
