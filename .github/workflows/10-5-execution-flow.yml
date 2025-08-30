@@ -1,0 +1,19 @@
+name: 10 - 5 - Controlling the Execution Flow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1 (force fail)
+        run: exit 1
+
+      - name: Step 2 (always runs)
+        if: always()
+        run: echo "➡️ I run even though Step 1 failed"
+
+      - name: Step 3 (check failure)
+        if: failure()
+        run: echo "❌ I run because a previous step failed"
