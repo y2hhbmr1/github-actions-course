@@ -21,9 +21,8 @@ jobs:
           # Write outputs (sticky notes)
           echo "status=${{ inputs.pizza-status }}" >> $GITHUB_OUTPUT
           echo "topping=Extra Cheese 🧀" >> $GITHUB_OUTPUT
-      - name: Print the sticky notes
-        # Let's print the sticky notes file (for clarity)
-        run: cat $GITHUB_OUTPUT
+          echo "---- Debug: printing GITHUB_OUTPUT file ----"
+          cat $GITHUB_OUTPUT
 
     outputs:
       pizza_status: ${{ steps.make-pizza.outputs.status }}
