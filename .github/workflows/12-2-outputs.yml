@@ -1,0 +1,47 @@
+name: 12 - 2 - Outputs Workflow
+
+on:
+  workflow_dispatch: # we run this workflow manually
+    inputs:
+      pizza-status: # the customer chooses the pizza status
+        description: Select the status of the pizza
+        type: choice
+        options:
+          - ready
+          - burnt
+        default: ready
+
+jobs:
+  chef: # Job 1 - The chef prepares the pizza
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make the Pizza
+        id: make-pizza # give this step a name so we can refer to its outputs
+        run: |
+          # Write outputs (sticky notes)
+          echo "status=${{ inputs.pizza-status }}" >> $GITHUB_OUTPUT
+          echo "topping=Extra Cheese 🧀" >> $GITHUB_OUTPUT
+      - name: Print the sticky notes
+        # Let's print the sticky notes file (for clarity)
+        run: cat $GITHUB_OUTPUT
+
+    outputs:
+      pizza_status: ${{ steps.make-pizza.outputs.status }}
+      topping_used:
+        ${{ steps.make-pizza.outputs.topping }}
+        # 👆 we declare which notes (outputs) this job will pass to others
+
+  delivery: # Job 2 - The delivery person
+    runs-on: ubuntu-latest
+    needs: chef # wait for the chef's job to finish
+    if:
+      ${{ needs.chef.outputs.pizza_status == 'ready' }}
+      # 👆 delivery only happens if the chef said pizza is "ready"
+    steps:
+      - name: Deliver the Pizza
+        run: echo "🍕 Delivering pizza to customer..."
+
+      - name: Print the notes from chef
+        run: |
+          echo "Pizza status: ${{ needs.chef.outputs.pizza_status }}"
+          echo "Topping used: ${{ needs.chef.outputs.topping_used }}"
