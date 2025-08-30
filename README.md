@@ -1,2 +1,2 @@
 # GitHub Actions Course
-# Testing functions again
+# Testing functions again with label
