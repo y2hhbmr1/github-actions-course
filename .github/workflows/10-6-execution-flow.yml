@@ -1,0 +1,24 @@
+name: 10 - 6 - Controlling the Execution Flow
+
+on: workflow_dispatch
+
+#Job-level continue-on-error
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1 # Force failure
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: build
+    continue-on-error: true # 👈 Even if this job fails, workflow continues
+    steps:
+      - run: exit 1 # Simulate test failure
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - run: echo "🚀 Deploying!"
