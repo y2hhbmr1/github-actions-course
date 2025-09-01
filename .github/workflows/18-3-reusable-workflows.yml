@@ -5,11 +5,10 @@ on:
 
 jobs:
   deploy:
-    uses: ./.github/workflows/18-1-reusable-workflows.yaml
+    uses: ./.github/workflows/18-1-reusable-workflows.yml
     with:
       target-directory: dummmy-dir
   e2e-tests:
-    uses: y2hhbmr1/github-actions-course-example-e2e/.github/workflows/e2e.yaml@main
+    uses: y2hhbmr1/github-actions-course-example-e2e/.github/workflows/e2e.yml@main
     needs: deploy
-    secrets:
-      access-token: ${{ secrets.GH_TOKEN }}
+    secrets: inherit
