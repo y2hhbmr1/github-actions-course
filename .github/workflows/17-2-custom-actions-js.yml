@@ -1,14 +1,47 @@
+# See 17-custom-actions/README.md for more information
+# about how to create and use custom actions in workflows.
+
 name: 17 - 2 - Custom Actions - JS
-run-name: 17 - 2 - Custom Actions - JS
+run-name: 17 - 2 - Custom Actions - JS | BB - ${{ inputs.base-branch }} TB - ${{ inputs.target-branch }} WD - ${{ inputs.working-dir }}
 
 on:
-  workflow_dispatch: # Manually triggered
+  workflow_dispatch:
+    inputs:
+      base-branch:
+        description: The branch used as the base for the dependency update checks
+        type: string
+        default: main
+      target-branch:
+        description: The branch from which the PR is created
+        type: string
+        default: update-dependencies
+      working-dir:
+        description: The working directory of the project to check for dependency updates
+        type: string
+        default: 17-custom-actions/react-app
+      debug:
+        description: Whether to output debug messages to the console
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   dependency-update:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - name: Check for dependency updates
+        id: update-deps
         uses: ./.github/actions/js-dependency-update
+        with:
+          base-branch: ${{ inputs.base-branch }}
+          head-branch: ${{ inputs.target-branch }}
+          working-directory: ${{ inputs.working-dir }}
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          debug: ${{ inputs.debug }}
+      - name: Print custom action output
+        run: |
+          echo "Updates available: ${{ steps.update-deps.outputs.updates-available }}"
