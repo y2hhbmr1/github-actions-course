@@ -1,2 +1,2 @@
 # GitHub Actions Course
-# Testing security workflow with unsafe job
+# Testing security workflow with unsafe job again
