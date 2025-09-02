@@ -1,0 +1,11 @@
+name: "Safe Title Check"
+description: "Safely checks the PR title without shell execution"
+
+inputs:
+  pr-title:
+    description: "The pull request title"
+    required: true
+
+runs:
+  using: "node20"
+  main: "index.js"
