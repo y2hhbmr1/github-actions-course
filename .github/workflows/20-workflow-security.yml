@@ -1,7 +1,8 @@
 name: 20 - Workflow Security
 
 on:
-  pull_request:
+  # pull_request:
+  workflow_dispatch:
 
 jobs:
   unsafe-pr:
